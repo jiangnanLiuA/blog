@@ -28,4 +28,14 @@ public class SystemConstants {
      */
     public static final String STATUS_NORMAL = "0";
 
+    /**
+     * 文章状态异常
+     */
+    public static final String STATUS_ERROR = "1";
+
+    /**
+     * 友链审核已通过
+     */
+    public static final String LINK_STATUS_NORMAL = "0";
+
 }

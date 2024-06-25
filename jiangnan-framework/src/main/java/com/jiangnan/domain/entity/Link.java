@@ -10,27 +10,26 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
- * 分类表(Category)表实体类
+ * 友链(Link)表实体类
  *
  * @author makejava
- * @since 2024-06-24 19:56:32
+ * @since 2024-06-25 15:55:53
  */
 @SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("jn_category")
-public class Category {
+@TableName("jn_link")
+public class Link {
 
     private Long id;
 
-    //分类名
     private String name;
-    //父分类id，如果没有父分类为-1
-    private Long pid;
-    //描述
+    private String logo;
     private String description;
-    //状态0:正常,1禁用
+    //网站地址
+    private String address;
+    //审核状态 (0代表审核通过，1代表审核未通过，2代表未审核)
     private String status;
     private Long createBy;
     private Date createTime;

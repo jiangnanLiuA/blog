@@ -30,15 +30,23 @@
             <scope>test</scope>
         </dependency>
         <!--SpringSecurity启动器-->
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>-->
+        </dependency>
         <!--redis依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+<!--        &lt;!&ndash; jedis &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>redis.clients</groupId>-->
+<!--            <artifactId>jedis</artifactId>-->
+<!--            <version>3.1.0</version>-->
+<!--        </dependency>-->
+
         <!--fastjson依赖-->
         <dependency>
             <groupId>com.alibaba</groupId>

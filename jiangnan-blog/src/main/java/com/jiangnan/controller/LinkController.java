@@ -1,23 +1,23 @@
 package com.jiangnan.controller;
 
 import com.jiangnan.domain.ResponseResult;
-import com.jiangnan.service.CategoryService;
+import com.jiangnan.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/category")
-public class CatrgoryController {
+@RequestMapping("/link")
+public class LinkController {
 
     @Autowired
-    private CategoryService categoryService;
+    private LinkService linkService;
 
-    @GetMapping("/getCategoryList")
-    public ResponseResult getCategoryList() {
-        ResponseResult result = categoryService.getCategoryList();
+    //查询所有友链
+    @GetMapping("/getAllLink")
+    public ResponseResult getAllLink() {
+        ResponseResult result = linkService.getAllLink();
         return result;
     }
-
 }

@@ -43,6 +43,10 @@ public class BeanCopyUtils {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 测试
+     * @param args
+     */
     public static void main(String[] args) {
         Article article = new Article();
         article.setId(1L);
