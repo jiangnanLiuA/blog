@@ -6,13 +6,16 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings(value = {"unchecked", "rawtypes"})
 @Component
+@Service
 public class RedisCache {
+
     @Autowired
     public RedisTemplate redisTemplate;
 

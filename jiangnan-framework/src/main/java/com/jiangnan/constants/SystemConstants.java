@@ -38,4 +38,9 @@ public class SystemConstants {
      */
     public static final String LINK_STATUS_NORMAL = "0";
 
+    /**
+     * 评论为根评论
+     */
+    public static final String ROOT_COMMENT = "-1";
+
 }

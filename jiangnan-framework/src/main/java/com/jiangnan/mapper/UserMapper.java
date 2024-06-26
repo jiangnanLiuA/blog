@@ -9,7 +9,6 @@ import com.jiangnan.domain.entity.User;
  * @author makejava
  * @since 2024-06-25 16:20:46
  */
-
 public interface UserMapper extends BaseMapper<User> {
 
 }
