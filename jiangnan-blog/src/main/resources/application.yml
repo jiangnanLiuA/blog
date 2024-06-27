@@ -8,9 +8,12 @@ spring:
     password: Andy
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
+    # 文件上传
     multipart:
-      max-file-size: 2MB
-      max-request-size: 5MB
+      # 单个上传文件的最大允许大小
+      max-file-size: 20MB
+      # HTTP请求中包含的所有文件的总大小的最大允许值
+      max-request-size: 20MB
 
 
   redis:
@@ -37,7 +40,10 @@ mybatis-plus:
       logic-delete-value: 1
       logic not-delete-value: 0
       id-type: auto
-
-
+# 七牛云配置 ->  密钥
+oss:
+  accessKey: Mwk7aurh7shvgAcJpiXnVe3sCzEtMMZF5CTXuhlv
+  secretKey: Tl5KufdrduO6ewMQ253lnR9tytt4TKk-PoMiLFLg
+  bucket: jn--blog
 
 

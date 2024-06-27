@@ -10,6 +10,8 @@ import com.jiangnan.domain.entity.Comment;
  * @since 2024-06-26 17:15:27
  */
 public interface CommentService extends IService<Comment> {
-    ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize);
+    ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize);
+
+    ResponseResult addComment(Comment comment);
 }
 

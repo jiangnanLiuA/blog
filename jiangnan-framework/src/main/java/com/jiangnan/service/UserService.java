@@ -1,5 +1,6 @@
 package com.jiangnan.service;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.entity.User;
 
 /**
@@ -9,5 +10,10 @@ import com.jiangnan.domain.entity.User;
  * @since 2024-06-26 20:08:00
  */
 public interface UserService extends IService<User> {
+    ResponseResult userInfo();
+
+    ResponseResult updateUserInfo(User user);
+
+    ResponseResult register(User user);
 }
 

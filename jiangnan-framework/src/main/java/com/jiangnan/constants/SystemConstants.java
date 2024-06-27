@@ -43,4 +43,13 @@ public class SystemConstants {
      */
     public static final String ROOT_COMMENT = "-1";
 
+    /**
+     * 文章评论
+     */
+    public static final String ARTICLE_COMMENT = "0";
+
+    /**
+     * 友链评论
+     */
+    public static final String LINK_COMMENT = "1";
 }

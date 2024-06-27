@@ -6,15 +6,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiangnan.constants.SystemConstants;
 import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.entity.Comment;
-import com.jiangnan.domain.entity.User;
 import com.jiangnan.domain.vo.CommentVo;
 import com.jiangnan.domain.vo.PageVo;
+import com.jiangnan.enums.AppHttpCodeEnum;
+import com.jiangnan.exception.SystemException;
 import com.jiangnan.mapper.CommentMapper;
 import com.jiangnan.service.CommentService;
 import com.jiangnan.service.UserService;
 import com.jiangnan.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -31,13 +33,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private UserService userService;
 
     @Override
-    public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize) {
         //查询对应文章的根评论
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         //对应文章 -> articleId 进行判断
-        lambdaQueryWrapper.eq(Comment::getArticleId, articleId);
+        lambdaQueryWrapper.eq(SystemConstants.ARTICLE_COMMENT.equals(commentType), Comment::getArticleId, articleId);
         //根评论 rootId = -1
         lambdaQueryWrapper.eq(Comment::getRootId, SystemConstants.ROOT_COMMENT);
+
+        //评论类型  一致
+        lambdaQueryWrapper.eq(Comment::getType, commentType);
 
         //分页查询
         Page<Comment> page = new Page<>(pageNum, pageSize);
@@ -57,6 +62,27 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
     }
+
+    /**
+     * 添加评论 -> 往评论表中添加记录
+     *
+     * @param comment
+     * @return
+     */
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        //给其他字段赋值
+//        comment.setCreateBy(SecurityUtils.getUserId());
+        //其他字段用 mp 自动填充完成  -> MyMetaObjectHandler
+
+        //评论内容不能为空
+        if (!StringUtils.hasText(comment.getContent())) {
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        save(comment);
+        return ResponseResult.okResult();
+    }
+
 
     private List<CommentVo> toCommentVoList(List<Comment> list) {
         List<CommentVo> commentVos = BeanCopyUtils.copyBeanList(list, CommentVo.class);
