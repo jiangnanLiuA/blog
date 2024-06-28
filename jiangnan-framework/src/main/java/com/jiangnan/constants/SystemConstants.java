@@ -52,4 +52,9 @@ public class SystemConstants {
      * 友链评论
      */
     public static final String LINK_COMMENT = "1";
+
+    /**
+     * 文章浏览量
+     */
+    public static final String ARTICLE_VIEW_COUNT = "article:viewCount";
 }

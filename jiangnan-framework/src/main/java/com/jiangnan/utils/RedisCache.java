@@ -133,6 +133,17 @@ public class RedisCache {
     }
 
     /**
+     * hash值递增操作 -> 浏览量
+     *
+     * @param key
+     * @param hKey
+     * @param v
+     */
+    public void incrementCacheMapValue(String key, String hKey, int v) {
+        redisTemplate.opsForHash().increment(key, hKey, v);
+    }
+
+    /**
      * 获得缓存的set
      *
      * @param key

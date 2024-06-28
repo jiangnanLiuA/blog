@@ -4,10 +4,7 @@ import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.entity.Article;
 import com.jiangnan.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +27,12 @@ public class ArticleController {
         //查询热门文章 封装成ResponseResult 返回
         ResponseResult result = articleService.hotArticleList();
         return result;
+    }
+
+    //更新浏览量
+    @PutMapping("/updateViewCount/{id}")
+    public ResponseResult updateViewCount(@PathVariable("id") Long id) {
+        return articleService.updateViewCount(id);
     }
 
     //分页查询文章的列表

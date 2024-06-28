@@ -1,5 +1,6 @@
 package com.jiangnan.controller;
 
+import com.jiangnan.annotation.SystemLog;
 import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.entity.User;
 import com.jiangnan.service.UserService;
@@ -25,6 +26,7 @@ public class UserController {
      * @return
      */
     @PutMapping("/userInfo")
+    @SystemLog(businessName = "更新用户信息")
     public ResponseResult updateUserInfo(@RequestBody User user) {
         return userService.updateUserInfo(user);
     }
