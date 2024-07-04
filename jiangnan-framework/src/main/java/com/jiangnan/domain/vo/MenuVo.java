@@ -39,5 +39,10 @@ public class MenuVo {
     //创建时间
     private Date createTime;
 
+    //权限标识
+    private String perms;
+
+    //备注
+    private String remark;
 //    private List<MenuVo> children;
 }
