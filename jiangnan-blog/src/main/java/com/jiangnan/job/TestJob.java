@@ -60,7 +60,7 @@ public class TestJob {
     public void testJob() {
         //执行代码
 
-        System.out.println(6);
+//        System.out.println(6);
     }
 
 }

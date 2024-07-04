@@ -1,0 +1,19 @@
+package com.jiangnan.domain.vo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AdminUserInfoVo {
+
+    private UserInfoVo user;
+
+    private List<String> permissions;
+
+    private List<String> roles;
+}

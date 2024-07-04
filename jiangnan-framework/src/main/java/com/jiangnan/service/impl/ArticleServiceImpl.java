@@ -5,21 +5,21 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiangnan.constants.SystemConstants;
 import com.jiangnan.domain.ResponseResult;
+import com.jiangnan.domain.dto.AddArticleDto;
 import com.jiangnan.domain.entity.Article;
+import com.jiangnan.domain.entity.ArticleTag;
 import com.jiangnan.domain.entity.Category;
-import com.jiangnan.domain.vo.ArticleDetailVo;
-import com.jiangnan.domain.vo.ArticleListVo;
-import com.jiangnan.domain.vo.HotArticleVo;
-import com.jiangnan.domain.vo.PageVo;
+import com.jiangnan.domain.vo.*;
 import com.jiangnan.mapper.ArticleMapper;
 import com.jiangnan.service.ArticleService;
+import com.jiangnan.service.ArticleTagService;
 import com.jiangnan.service.CategoryService;
 import com.jiangnan.utils.BeanCopyUtils;
 import com.jiangnan.utils.RedisCache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.events.Event;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private ArticleTagService articleTagService;
+
+    @Autowired
+    private ArticleService articleService;
+
 
     @Override
     public ResponseResult hotArticleList() {
@@ -116,9 +123,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
          *                          }
          *                      })
          */
-        articles = articles.stream()
-                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
-                .collect(Collectors.toList());
+//        articles = articles.stream()
+//                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+//                .collect(Collectors.toList());
 
 
         // 封装查询结果 -> vo
@@ -160,6 +167,32 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         //更新 redis 中对应id的浏览量
         redisCache.incrementCacheMapValue(SystemConstants.ARTICLE_VIEW_COUNT, id.toString(), 1);
+        return ResponseResult.okResult();
+    }
+
+
+
+
+    /**
+     * 增加博客文章
+     *
+     * @param articleDto
+     * @return
+     */
+    @Override
+    @Transactional
+    public ResponseResult add(AddArticleDto articleDto) {
+        //添加 博客
+        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
+        articleService.save(article);
+
+
+        List<ArticleTag> articleTags = articleDto.getTags().stream()
+                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .collect(Collectors.toList());
+
+        //添加 博客和标签的关联
+        articleTagService.saveBatch(articleTags);
         return ResponseResult.okResult();
     }
 }

@@ -1,21 +1,24 @@
 package com.jiangnan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiangnan.constants.SystemConstants;
 import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.entity.Article;
 import com.jiangnan.domain.entity.Category;
 import com.jiangnan.domain.vo.CategoryVo;
-import com.jiangnan.domain.vo.HotArticleVo;
+import com.jiangnan.domain.vo.PageVo;
 import com.jiangnan.mapper.CategoryMapper;
 import com.jiangnan.service.ArticleService;
 import com.jiangnan.service.CategoryService;
 import com.jiangnan.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -60,6 +63,49 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(categoryList, CategoryVo.class);
 
         return ResponseResult.okResult(categoryVos);
+    }
+
+    /**
+     * 写博客-查询文章分类的接口
+     *
+     * @return
+     */
+    @Override
+    public ResponseResult listAllCategory() {
+        LambdaQueryWrapper<Category> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Category::getStatus, SystemConstants.NORMAL);
+        List<Category> list = list(lambdaQueryWrapper);
+        List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(list, CategoryVo.class);
+        return ResponseResult.okResult(categoryVos);
+    }
+
+    /**
+     * 分页查询分类列表
+     *
+     * @param category
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageVo selectCategoryPage(Category category, Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper();
+
+        queryWrapper.like(StringUtils.hasText(category.getName()), Category::getName, category.getName());
+        queryWrapper.eq(Objects.nonNull(category.getStatus()), Category::getStatus, category.getStatus());
+
+        Page<Category> page = new Page<>();
+        page.setCurrent(pageNum);
+        page.setSize(pageSize);
+        page(page, queryWrapper);
+
+        //转换成Vo
+        List<Category> categories = page.getRecords();
+
+        PageVo pageVo = new PageVo();
+        pageVo.setTotal(page.getTotal());
+        pageVo.setRows(categories);
+        return pageVo;
     }
 }
 
