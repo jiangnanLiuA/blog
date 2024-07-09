@@ -16,6 +16,11 @@ import org.springframework.stereotype.Service;
 @Service("roleMenuService")
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
 
+    /**
+     * 修改角色-保存修改好的角色信息
+     *
+     * @param id
+     */
     @Override
     public void deleteRoleMenuByRoleId(Long id) {
         LambdaQueryWrapper<RoleMenu> queryWrapper = new LambdaQueryWrapper<>();

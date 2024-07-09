@@ -53,7 +53,7 @@ public class MenuController {
      * @return
      */
     @GetMapping(value = "/{menuId}")
-    //1.先查询根据菜单id查询对应的权限菜单
+    //1.先根据菜单id查询对应的权限菜单
     public ResponseResult getInfo(@PathVariable Long menuId) {
         return ResponseResult.okResult(menuService.getById(menuId));
     }

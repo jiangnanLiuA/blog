@@ -1,4 +1,5 @@
 package com.jiangnan.service.impl;
+
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiangnan.domain.entity.ArticleTag;
 import com.jiangnan.mapper.ArticleTagMapper;
@@ -12,6 +13,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("articleTagService")
 public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements ArticleTagService {
-    
+
 }
 

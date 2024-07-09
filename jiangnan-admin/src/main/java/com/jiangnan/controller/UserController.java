@@ -69,6 +69,7 @@ public class UserController {
      */
     @DeleteMapping("/{userIds}")
     public ResponseResult remove(@PathVariable List<Long> userIds) {
+        //判断要删除的用户id和正在登录的id是否一致
         if (userIds.contains(SecurityUtils.getUserId())) {
             return ResponseResult.errorResult(500, "不能删除当前你正在使用的用户");
         }

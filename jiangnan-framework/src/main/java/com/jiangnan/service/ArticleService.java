@@ -3,6 +3,7 @@ package com.jiangnan.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.dto.AddArticleDto;
+import com.jiangnan.domain.dto.ArticleDto;
 import com.jiangnan.domain.entity.Article;
 import com.jiangnan.domain.vo.ArticleByIdVo;
 import com.jiangnan.domain.vo.PageVo;
@@ -31,5 +32,5 @@ public interface ArticleService extends IService<Article> {
     ArticleByIdVo getInfo(Long id);
 
     //修改文章 -> 然后才是修改文章
-    void edit(AddArticleDto article);
+    void edit(ArticleDto article);
 }

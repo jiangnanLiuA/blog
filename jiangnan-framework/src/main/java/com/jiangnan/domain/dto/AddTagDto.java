@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EditTagDto {
+public class AddTagDto {
 
-    private Long id;
     //备注
     private String remark;
     //标签名

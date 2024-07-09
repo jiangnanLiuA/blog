@@ -85,6 +85,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!StringUtils.hasText(user.getEmail())) {
             throw new SystemException(AppHttpCodeEnum.EMAIL_EXIST);
         }
+        //手机号码
+        if(!StringUtils.hasText(user.getPhonenumber())){
+            throw new SystemException(AppHttpCodeEnum.PHONENUMBER_NOT_NULL);
+        }
 
         //对数据进行是否存在判断
         if (userNameExist(user.getUserName())) {
@@ -102,6 +106,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(encodePassword);
         //存入数据库
         save(user);
+
         return ResponseResult.okResult();
     }
 
@@ -109,6 +114,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(User::getUserName, userName);
 
+        //如果大于0就说明从数据库查出来了，也就说明是已经存在数据库的
         return count(lambdaQueryWrapper) > 0;
     }
 

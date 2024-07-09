@@ -36,9 +36,6 @@ public class MenuVo {
     private String status;
     //菜单图标
     private String icon;
-    //创建时间
-    private Date createTime;
-
     //权限标识
     private String perms;
 

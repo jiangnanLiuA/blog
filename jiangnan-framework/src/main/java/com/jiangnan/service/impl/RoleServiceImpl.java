@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +40,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
         //判断是否是管理员 如果是 -> 返回集合中只需要有admin
-        if (SecurityUtils.isAdmin()) {
+        if (id == 1L) {
             List<String> roleKeys = new ArrayList<>();
             //为什么查 admin 字段即可?
             roleKeys.add("admin");
@@ -95,7 +96,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     private void insertRoleMenu(Role role) {
         List<RoleMenu> roleMenuList = Arrays.stream(role.getMenuIds())
-                .map(memuId -> new RoleMenu(role.getId(), memuId))
+                .map(menuId -> new RoleMenu(role.getId(), menuId))
                 .collect(Collectors.toList());
         roleMenuService.saveBatch(roleMenuList);
     }
@@ -120,7 +121,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      */
     @Override
     public List<Role> selectRoleAll() {
-        return list(Wrappers.<Role>lambdaQuery().eq(Role::getStatus, SystemConstants.STATUS_NORMAL));
+        return list(Wrappers.<Role>lambdaQuery().eq(Role::getStatus, SystemConstants.NORMAL));
     }
 
     /**

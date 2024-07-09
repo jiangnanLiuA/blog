@@ -20,7 +20,7 @@ public class UploadController {
             return uploadService.uploadImg(multipartFile);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("文件上传上传失败");
+            throw new RuntimeException("文件上传失败");
         }
     }
 }

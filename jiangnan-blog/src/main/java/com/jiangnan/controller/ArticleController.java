@@ -48,5 +48,4 @@ public class ArticleController {
         ResponseResult result = articleService.getArticleDetail(id);
         return result;
     }
-
 }

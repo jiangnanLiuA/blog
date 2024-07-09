@@ -1,6 +1,7 @@
 package com.jiangnan.controller;
 
 import com.jiangnan.domain.ResponseResult;
+import com.jiangnan.domain.dto.AddTagDto;
 import com.jiangnan.domain.dto.EditTagDto;
 import com.jiangnan.domain.dto.TagListDto;
 import com.jiangnan.domain.entity.Tag;
@@ -42,7 +43,7 @@ public class TagController {
      * @return
      */
     @PostMapping
-    public ResponseResult add(@RequestBody TagListDto tagDto) {
+    public ResponseResult add(@RequestBody AddTagDto tagDto) {
         tagService.save(BeanCopyUtils.copyBean(tagDto, Tag.class));
         return ResponseResult.okResult();
     }
@@ -65,18 +66,18 @@ public class TagController {
      * @param ids
      * @return
      */
-    @DeleteMapping
-    public ResponseResult remove(@RequestParam(value = "ids") String ids) {
-        if (!ids.contains(",")) {
-            tagService.removeById(ids);
-        } else {
-            String[] idArr = ids.split(",");
-            for (String id : idArr) {
-                tagService.removeById(id);
-            }
-        }
-        return ResponseResult.okResult();
-    }
+//    @DeleteMapping
+//    public ResponseResult remove(@RequestParam(value = "ids") String ids) {
+//        if (!ids.contains(",")) {
+//            tagService.removeById(ids);
+//        } else {
+//            String[] idArr = ids.split(",");
+//            for (String id : idArr) {
+//                tagService.removeById(id);
+//            }
+//        }
+//        return ResponseResult.okResult();
+//    }
 
 
     /**
@@ -88,15 +89,13 @@ public class TagController {
     @GetMapping("/{id}")
     //根据标签的id来查询标签
     public ResponseResult getInfo(@PathVariable(value = "id") Long id) {
-        Tag tag = tagService.getById(id);
-        return ResponseResult.okResult(tag);
+        return ResponseResult.okResult(tagService.getById(id));
     }
 
     @PutMapping
     //根据标签的id来修改标签
-    public ResponseResult edit(@RequestBody EditTagDto tagDto) {
-        Tag tag = BeanCopyUtils.copyBean(tagDto, Tag.class);
-        tagService.updateById(tag);
+    public ResponseResult edit(@RequestBody EditTagDto editTagDto) {
+        tagService.updateById(BeanCopyUtils.copyBean(editTagDto, Tag.class));
         return ResponseResult.okResult();
     }
 

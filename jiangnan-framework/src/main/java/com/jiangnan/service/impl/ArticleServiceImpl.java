@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiangnan.constants.SystemConstants;
 import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.dto.AddArticleDto;
+import com.jiangnan.domain.dto.ArticleDto;
 import com.jiangnan.domain.entity.Article;
 import com.jiangnan.domain.entity.ArticleTag;
 import com.jiangnan.domain.entity.Category;
@@ -13,6 +14,7 @@ import com.jiangnan.domain.vo.*;
 import com.jiangnan.mapper.ArticleMapper;
 import com.jiangnan.service.ArticleService;
 import com.jiangnan.service.ArticleTagService;
+import com.jiangnan.service.ArticleVoService;
 import com.jiangnan.service.CategoryService;
 import com.jiangnan.utils.BeanCopyUtils;
 import com.jiangnan.utils.RedisCache;
@@ -93,9 +95,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // mp 的 page方法 -> 分页查询
         page(page, lambdaQueryWrapper);
 
-        // 查询categoryName
-        List<Article> articles = page.getRecords();
-        //articleId去查询articleName进行设置
 
         //传统for循环解决
 //        for (Article article : articles) {
@@ -124,13 +123,25 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
          *                          }
          *                      })
          */
-//        articles = articles.stream()
-//                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
-//                .collect(Collectors.toList());
+        // 查询categoryName
+        List<Article> articles = page.getRecords();
+        //articleId去查询articleName进行设置
+        articles.stream()
+                .map(new Function<Article, Article>() {
+                    @Override
+                    public Article apply(Article article) {
+                        Category category = categoryService.getById(article.getCategoryId());
+                        String name = category.getName();
+                        article.setCategoryName(name);
+                        return article;
+//                        return article.setCategoryName(categoryService.getById(article.getCategoryId()).getName());
+                    }
+                })
+                .collect(Collectors.toList());
 
 
         // 封装查询结果 -> vo
-        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
 
         // 匹配前端格式
         PageVo pageVo = new PageVo(articleListVos, page.getTotal());
@@ -178,6 +189,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
 
+    @Autowired
+    private ArticleVoService articleVoService;
+
     /**
      * 增加博客文章
      *
@@ -188,12 +202,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Transactional
     public ResponseResult add(AddArticleDto articleDto) {
         //添加 博客
-        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
-        articleService.save(article);
-
+        ArticleVo articleVo = BeanCopyUtils.copyBean(articleDto, ArticleVo.class);
+        articleVoService.save(articleVo);
 
         List<ArticleTag> articleTags = articleDto.getTags().stream()
-                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .map(tagId -> new ArticleTag(articleVo.getId(), tagId))
                 .collect(Collectors.toList());
 
         //添加 博客和标签的关联
@@ -258,7 +271,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @param articleDto
      */
     @Override
-    public void edit(AddArticleDto articleDto) {
+    public void edit(ArticleDto articleDto) {
         Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
         //更新博客信息
         updateById(article);

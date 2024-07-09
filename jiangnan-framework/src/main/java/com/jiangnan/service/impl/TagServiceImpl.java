@@ -36,6 +36,14 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Autowired
     private TagMapper tagMapper;
 
+    /**
+     * 查询标签
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param tagListDto
+     * @return
+     */
     @Override
     public ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto) {
         //分页查询

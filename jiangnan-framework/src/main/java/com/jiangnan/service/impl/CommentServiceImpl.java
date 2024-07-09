@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 评论表(Comment)表服务实现类
@@ -49,6 +51,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         page(page, lambdaQueryWrapper);
 
         //封装vo
+//        List<Comment> sortedComments = page.getRecords().stream()
+//                .sorted(Comparator.comparing(Comment::getCreateTime).reversed())
+//                .collect(Collectors.toList());
         List<CommentVo> commentVoList = toCommentVoList(page.getRecords());
 
         //查询所有根评论对应的子评论集合，并且赋值给对应的属性
@@ -58,7 +63,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             //赋值
             commentVo.setChildren(children);
         }
-
 
         return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
     }
@@ -88,7 +92,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<CommentVo> commentVos = BeanCopyUtils.copyBeanList(list, CommentVo.class);
         //遍历 vo 集合
         for (CommentVo commentVo : commentVos) {
-            //通过 createBy查询用户的昵称并赋值
+            //通过 createBy查询用户的昵称并赋值wo
             String nickName = userService.getById(commentVo.getCreateBy()).getNickName();
             commentVo.setUsername(nickName);
             //通过 toCommentUserId查询用户的昵称并赋值
@@ -114,7 +118,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Comment::getRootId, id);
         //按照时间排序
-        lambdaQueryWrapper.orderByAsc(Comment::getCreateTime);
+        lambdaQueryWrapper.orderByDesc(Comment::getCreateTime);
         //拿到所有评论
         List<Comment> comments = list(lambdaQueryWrapper);
         //将评论封装为vo

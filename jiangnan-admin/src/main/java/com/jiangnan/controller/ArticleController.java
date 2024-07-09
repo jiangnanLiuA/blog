@@ -2,6 +2,7 @@ package com.jiangnan.controller;
 
 import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.dto.AddArticleDto;
+import com.jiangnan.domain.dto.ArticleDto;
 import com.jiangnan.domain.entity.Article;
 import com.jiangnan.domain.vo.ArticleByIdVo;
 import com.jiangnan.domain.vo.PageVo;
@@ -56,17 +57,13 @@ public class ArticleController {
         return ResponseResult.okResult(article);
     }
 
-    /**
-     * 2.然后才是修改文章
-     *
-     * @param article
-     * @return
-     */
     @PutMapping
-    public ResponseResult edit(@RequestBody AddArticleDto article) {
+    //2.然后才是修改文章
+    public ResponseResult edit(@RequestBody ArticleDto article){
         articleService.edit(article);
         return ResponseResult.okResult();
     }
+
 
     /**
      * 根据文章id来删除文章

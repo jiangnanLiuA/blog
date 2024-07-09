@@ -23,10 +23,11 @@ import java.util.stream.Collectors;
  */
 @Service("menuService")
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+
     @Override
     public List<String> selectPermsByUserId(Long id) {
         //如果是管理员，返回所有的权限
-        if (SecurityUtils.isAdmin()) {
+        if (id == 1L) {
             LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
             //获取菜单类型为C或者F
             wrapper.in(Menu::getMenuType, SystemConstants.MENU, SystemConstants.BUTTON);
@@ -35,24 +36,29 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             //未被删除的权限
             //delFlag 配置文件中已经配置过，无需重复
 
-            List<Menu> menuList = list(wrapper);
+            List<Menu> menus = list(wrapper);
 
-            List<String> perms = menuList.stream()
+            List<String> perms = menus.stream()
                     .map(Menu::getPerms)
                     .collect(Collectors.toList());
             return perms;
         }
         //否则 返回其所具有的权限
-        List<String> perms = getBaseMapper().selectPermsByUserId(id);
-        return perms;
+        return getBaseMapper().selectPermsByUserId(id);
     }
 
+    /**
+     * 查询用户的路由信息(权限菜单)
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public List<Menu> selectRouterMenuTreeByUserId(Long userId) {
         MenuMapper menuMapper = getBaseMapper();
         List<Menu> menus = null;
         //判断是不是管理员
-        if (SecurityUtils.isAdmin()) {
+        if (userId.equals(1L)) {
             //如果是 返回所有符合要求的Menu
             menus = menuMapper.selectAllRouterMenu();
         } else {
@@ -83,37 +89,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return menusList;
     }
 
-    @Override
-    public List<Menu> selectMenuList(Menu menu) {
-
-        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
-        //menuName模糊查询
-        queryWrapper.like(StringUtils.hasText(menu.getMenuName()), Menu::getMenuName, menu.getMenuName());
-        queryWrapper.eq(StringUtils.hasText(menu.getStatus()), Menu::getStatus, menu.getStatus());
-        //排序 parent_id和order_num
-        queryWrapper.orderByAsc(Menu::getParentId, Menu::getOrderNum);
-        List<Menu> menus = list(queryWrapper);
-        return menus;
-    }
-
-    @Override
-    public boolean hasChild(Long menuId) {
-        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Menu::getParentId, menuId);
-        return count(queryWrapper) != 0;
-    }
-
-    /**
-     * 修改角色-根据角色id查询对应角色菜单列表树
-     *
-     * @param roleId
-     * @return
-     */
-    @Override
-    public List<Long> selectMenuListByRoleId(Long roleId) {
-        return getBaseMapper().selectMenuListByRoleId(roleId);
-    }
-
     /**
      * 获取存入参数的子Menu集合
      *
@@ -134,8 +109,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     /**
      * 获取存入参数的子Menu集合
      *
-     * @param menuVo
-     * @param menuVos
+     * @param
+     * @param
      * @return
      */
 //    private List<MenuVo> getChildren(MenuVo menuVo, List<MenuVo> menuVos) {
@@ -145,5 +120,41 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 //                .collect(Collectors.toList());
 //        return childrenList;
 //    }
+    @Override
+    public List<Menu> selectMenuList(Menu menu) {
+
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        //menuName模糊查询
+        queryWrapper.like(StringUtils.hasText(menu.getMenuName()), Menu::getMenuName, menu.getMenuName());
+        queryWrapper.eq(StringUtils.hasText(menu.getStatus()), Menu::getStatus, menu.getStatus());
+        //排序 parent_id和order_num
+        queryWrapper.orderByAsc(Menu::getParentId, Menu::getOrderNum);
+        List<Menu> menus = list(queryWrapper);
+        return menus;
+    }
+
+    /**
+     * 删除菜单-是否存在子菜单
+     *
+     * @param menuId
+     * @return
+     */
+    @Override
+    public boolean hasChild(Long menuId) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getParentId, menuId);
+        return count(queryWrapper) != 0;
+    }
+
+    /**
+     * 修改角色-根据角色id查询对应角色菜单列表树
+     *
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<Long> selectMenuListByRoleId(Long roleId) {
+        return getBaseMapper().selectMenuListByRoleId(roleId);
+    }
 }
 

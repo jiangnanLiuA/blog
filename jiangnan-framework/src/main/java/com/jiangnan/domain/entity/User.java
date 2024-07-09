@@ -3,13 +3,10 @@ package com.jiangnan.domain.entity;
 import java.util.Date;
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * 用户表(User)表实体类
@@ -23,7 +20,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @NoArgsConstructor
 @TableName("sys_user")
 public class User {
-    //主键@TableId
+    //主键
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     //用户名

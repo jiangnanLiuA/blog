@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.jiangnan.domain.ResponseResult;
 import com.jiangnan.domain.dto.CategoryDto;
 import com.jiangnan.domain.entity.Category;
+import com.jiangnan.domain.vo.CategoryVo;
 import com.jiangnan.domain.vo.ExcelCategoryVo;
 import com.jiangnan.domain.vo.PageVo;
 import com.jiangnan.enums.AppHttpCodeEnum;
@@ -32,7 +33,8 @@ public class CategoryController {
      */
     @GetMapping("/listAllCategory")
     public ResponseResult listAllCategory() {
-        return categoryService.listAllCategory();
+        List<CategoryVo> list = categoryService.listAllCategory();
+        return ResponseResult.okResult(list);
     }
 
     /**
@@ -80,18 +82,18 @@ public class CategoryController {
      * @param ids
      * @return
      */
-    @DeleteMapping
-    public ResponseResult remove(@RequestParam(value = "ids") String ids) {
-        if (!ids.contains(",")) {
-            categoryService.removeById(ids);
-        } else {
-            String[] idArr = ids.split(",");
-            for (String id : idArr) {
-                categoryService.removeById(id);
-            }
-        }
-        return ResponseResult.okResult();
-    }
+//    @DeleteMapping
+//    public ResponseResult remove(@RequestParam(value = "ids") String ids) {
+//        if (!ids.contains(",")) {
+//            categoryService.removeById(ids);
+//        } else {
+//            String[] idArr = ids.split(",");
+//            for (String id : idArr) {
+//                categoryService.removeById(id);
+//            }
+//        }
+//        return ResponseResult.okResult();
+//    }
 
     /**
      * 修改文章的分类

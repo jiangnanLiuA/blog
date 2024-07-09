@@ -48,7 +48,7 @@ public class LoginController {
         return loginService.login(user);
     }
 
-    @GetMapping("/getInfo")
+    @GetMapping("getInfo")
     public ResponseResult<AdminUserInfoVo> getInfo() {
 
         //获取当前登录的用户
@@ -65,12 +65,12 @@ public class LoginController {
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
 
         //封装数据返回
-        AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(userInfoVo, permsList, roleKeyList);
+        AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(permsList, roleKeyList, userInfoVo);
 
         return ResponseResult.okResult(adminUserInfoVo);
     }
 
-    @GetMapping("/getRouters")
+    @GetMapping("getRouters")
     public ResponseResult<RoutersVo> getRouters() {
         //获取当前登录的用户id
         Long userId = SecurityUtils.getUserId();

@@ -3,7 +3,7 @@
 <mapper namespace="com.jiangnan.mapper.RoleMapper">
     <select id="selectRoleKeyByUserId" resultType="java.lang.String">
 
-        SELECT r.role_key FROM
+        SELECT r.`role_key` FROM
 	        `sys_user_role` ur
 	        LEFT JOIN  `sys_role` r
 	        ON ur.`role_id` = r.`id`

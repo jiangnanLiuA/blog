@@ -60,7 +60,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new LoginUser(user, list);
         }
 
-        // 如果不是后台用户，就只封装用户信息，不封装权限信息
+        //如果不是后台用户，就只封装用户信息，不封装权限信息
         //返回查询到的用户信息。注意下面那行直接返回user会报错，我们需要在huanf-framework工程的domain目录新
         //建LoginUser类，在LoginUser类实现UserDetails接口，然后下面那行就返回LoginUser对象
         return new LoginUser(user, null);
